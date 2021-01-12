@@ -16,12 +16,10 @@ void str_cli(FILE *fp,int sockfd){
 	char *buff = malloc(bufs);
 
 	while((fgets(buff,bufs,fp)!=NULL)){
-		send(sockfd,buff,bufs,0);
+		send(sockfd,buff,sizeof(bufs),0);
 
-		if((cont = recv(sockfd,buff,bufs,0)) >=0){
-			printf("Server replied :");
+		if((cont = recv(sockfd,buff,bufs,0)) >=0)
 			fputs(buff,stdout);
-		}
 	}
 
 	printf("str cli\n");
@@ -48,9 +46,15 @@ int main(int argc, char* argv[]){
 		printf("Connected\n");
 	else
 		printf("Error in connect");
+
+	//if(ret==ETIMEDOUT)
+	//	printf("Timeout\n");
+	//if(ret==EPROTOTYPE)
+	//	printf(" Prototype error\n");
+	//if(ret==ENOTSOCK)
+	//	printf("Not socke error");
 	
 	str_cli(stdin,create_socket);
 
 	return 0;
 }
-
