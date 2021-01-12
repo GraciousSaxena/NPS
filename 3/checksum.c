@@ -1,30 +1,38 @@
-#include<stdio.h>
+#include <stdio.h>
+#include <stdio.h>
 
-unsigned short checksum() {
-    unsigned  fields[9];
-    int i,sum=0;
-    for(i=0;i<9;i++) {
-        printf("Field %d\n",i+1);
-        scanf("%x",&fields[i]);
-        sum=sum+(unsigned short) fields[i];
-        while(sum>>16)
-            sum=(sum & 0xFFFF) + (sum >>16);
+int checksum() {
+    unsigned int parts[9];
+    unsigned int sum;
+    printf("Enter the parts:\n");
+    for (int i = 0; i < 9; i++) {
+        scanf("%X", &parts[i]);
+        sum += parts[i];
+        while (sum >> 16)
+            sum = (sum & 0xffff) + (sum >> 16);
     }
-    sum=~sum;
-    printf("checksum:%x\n",(unsigned short)sum);
-    return (unsigned short)~sum;
+    return ~sum;
 }
 
 int main() {
-    unsigned short check1,check2;
-    printf("sender:\n");
-    check1=checksum();
-    printf("receiver:\n");
-    check2=checksum();
-    
-    if(check1==check2)
-        printf("no error\n");
-    else
-        printf("error\n");
-    return 0;
+    printf("--- SENDER ---\n");
+    int sender_checksum = checksum();
+    printf("\n--- RECV ---\n");
+    int recv_checksum = checksum();
+    printf("Sent checksum: %x\n", sender_checksum);
+    printf("Recieved checksum: %x\n", recv_checksum);
+    if (sender_checksum == recv_checksum) {
+        printf("Matching checksums!\n");
+        return 0;
+    } else {
+        printf("Mismatched checksums!\n");
+        return 0;
+    }
+
 }
+
+// 00004500 00000073 00000000 00004000 00004011 0000c0a8 00000001 0000c0a8 000000c7
+// checksum - ffffb861
+
+// 00004500 0000003c 00001c46 00004000 00004006 0000ac10 00000a63 0000ac10 00000a0c
+// checksum - 0000b1e6
