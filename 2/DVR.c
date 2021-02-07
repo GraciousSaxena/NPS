@@ -1,4 +1,4 @@
-#include<stdio.h>
+/*#include<stdio.h>
 #include<stdlib.h>
 
 int A[10][10], n, d[10], p[10];
@@ -32,6 +32,128 @@ void BellmanFord(int s){
            for(v=0;v<n;v++){
 
                  if(d[v] > d[u] + A[u][v]){
+                      printf("Negative Edge\n");
+		      exit(0);
+
+                 }
+
+           }
+
+      }
+
+}
+
+ 
+
+int main(){
+
+      printf("Enter the no. of vertices : ");
+
+      scanf("%d",&n);
+
+      printf("Enter the adjacency matrix\n");
+
+      int i,j;
+
+      for(i=0;i<n;i++)
+
+           for(j=0;j<n;j++)
+
+                 scanf("%d",&A[i][j]);
+
+          
+
+      int source;
+
+      for(source=0;source<n;source++){
+
+          
+
+          
+
+           for(i=0;i<n;i++){
+
+                 d[i] = 999;
+
+                 p[i] = -1;
+
+           }
+
+           d[source] = 0;
+
+          
+
+           BellmanFord(source);
+
+          
+
+           printf("Router %d\n",source);
+
+          
+
+           for(i=0;i<n;i++){
+
+                 if(i != source){
+
+                      j = i;
+
+                      while(p[j] != -1){
+
+                            printf("%d <- ",j);
+
+                            j = p[j];
+
+                      }
+
+                 }
+
+                 printf("%d\tCost %d\n",source,d[i]);
+
+           }
+
+      }
+
+     
+
+      return 0;
+
+}
+*/
+
+#include<stdio.h>
+#include<stdlib.h>
+
+int A[10][10], n, d[10], p[10];
+
+void BellmanFord(int s){
+
+      int i,j,v;
+
+      for(i=1;i<n;i++){
+
+           for(j=0;j<n;j++){
+
+                 for(k=0;k<n;k++){
+
+                      if(d[k] > d[j] + A[j][k]){
+
+                            d[k] = d[j] + A[j][k];
+
+                            p[k] = j;
+
+                      }
+
+                 }
+
+           }
+
+      }
+
+      for(i=0;i<n;i++){
+
+           for(j=0;j<n;j++){
+
+                 if(d[j] > d[i] + A[i][j]){
                       printf("Negative Edge\n");
 		      exit(0);
 
