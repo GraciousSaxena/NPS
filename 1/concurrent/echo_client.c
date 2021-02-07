@@ -16,7 +16,7 @@ void str_cli(FILE *fp,int sockfd){
 	char *buff = malloc(bufs);
 
 	while((fgets(buff,bufs,fp)!=NULL)){
-		send(sockfd,buff,sizeof(bufs),0);
+		send(sockfd,buff,bufs,0);
 
 		if((cont = recv(sockfd,buff,bufs,0)) >=0)
 			fputs(buff,stdout);
