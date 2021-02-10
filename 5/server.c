@@ -1,4 +1,51 @@
-#include <stdio.h>
+#include<sys/socket.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+
+#include<arpa/inet.h>
+#include<netinet/in.h>
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<fcntl.h>
+
+#include<string.h>
+
+int main(){
+	int sockfd, client1, client2, buffsize = 1024, len;
+	struct sockaddr_in addr, cliAddr;
+	sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	char buffer[1024];
+	
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(15003);
+	addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	
+	bind(sockfd, (struct sockaddr *)&addr, sizeof(addr));
+	
+	listen(sockfd, 5);
+	
+	len = sizeof(cliAddr);
+	
+	client1 = accept(sockfd, (struct sockaddr *)&cliAddr, &len);
+	client2 = accept(sockfd, (struct sockaddr *)&cliAddr, &len);
+	
+	while(1){
+		memset(&buffer[0], 0, buffsize);
+		recv(client1, buffer, buffsize, 0);
+		printf("%s\n", buffer);
+		send(client2, buffer, buffsize, 0);
+		memset(&buffer[0], 0, buffsize);
+		recv(client2, buffer, buffsize, 0);
+		send(client1, buffer, buffsize, 0);
+		printf("%s\n", buffer);
+	}
+	
+	return 0;
+}
+
+/*#include <stdio.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <string.h>
@@ -78,3 +125,4 @@ int main() {
 
     return 0;
 }
+*/
