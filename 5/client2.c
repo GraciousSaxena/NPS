@@ -1,4 +1,38 @@
-#include <stdio.h>
+#include<sys/socket.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+
+#include<arpa/inet.h>
+#include<netinet/in.h>
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<fcntl.h>
+
+#include<string.h>
+
+int main(){
+	int sockfd, client1, client2, buffsize = 1024;
+	struct sockaddr_in addr, cliAddr;
+	sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	char buffer[1024];
+	
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(15003);
+	addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	
+	connect(sockfd, (struct sockaddr*)&addr, sizeof(addr));
+	
+	while(1){
+		recv(sockfd, buffer, buffsize, 0);
+		fputs(buffer, stdout);
+		memset(&buffer[0], 0, buffsize);
+		fgets(buffer, buffsize, stdin);
+		send(sockfd, buffer, buffsize, 0);
+	}
+}
+/*#include <stdio.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <string.h>
@@ -77,3 +111,4 @@ int main() {
     }
     return 0;
 }
+*/
